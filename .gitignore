@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Runtime artifacts — these live in the Hermes plugin data dir, but a dev
+# install symlinked into ~/.hermes/plugins can leave them here.
+ws.log
+ws.log.1
+missions_state.json

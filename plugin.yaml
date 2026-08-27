@@ -1,0 +1,72 @@
+name: clawtalk
+label: ClawTalk
+kind: platform
+version: 0.1.0
+description: >
+  Voice calls, SMS/MMS, walkie-talkie, missions, and push approvals via ClawTalk
+  (clawdtalk.com). Registers a `clawtalk` gateway platform whose inbound events
+  arrive over a persistent outbound WebSocket, plus 21 agent tools, a bundled
+  mission skill, and the `hermes clawtalk` CLI namespace.
+author: Telnyx
+homepage: https://www.clawdtalk.com/
+repository: https://github.com/team-telnyx/clawtalk-plugin-hermes
+
+provides_tools:
+  - clawtalk_bot_config
+  - clawtalk_call
+  - clawtalk_call_status
+  - clawtalk_sms
+  - clawtalk_sms_list
+  - clawtalk_sms_conversations
+  - clawtalk_approve
+  - clawtalk_status
+  - clawtalk_mission_init
+  - clawtalk_mission_setup_agent
+  - clawtalk_mission_schedule
+  - clawtalk_mission_event_status
+  - clawtalk_mission_complete
+  - clawtalk_mission_update_step
+  - clawtalk_mission_log_event
+  - clawtalk_mission_memory
+  - clawtalk_mission_list
+  - clawtalk_mission_get_plan
+  - clawtalk_mission_cancel_event
+  - clawtalk_assistants
+  - clawtalk_insights
+
+requires_env:
+  - name: CLAWTALK_API_KEY
+    description: "ClawTalk API key (get one at https://clawdtalk.com/portal/dashboard)"
+    prompt: "ClawTalk API key"
+    url: "https://clawdtalk.com/portal/dashboard"
+    password: true
+
+optional_env:
+  - name: CLAWTALK_SERVER
+    description: "ClawTalk server URL (default: https://clawdtalk.com)"
+    prompt: "ClawTalk server URL"
+    password: false
+  - name: CLAWTALK_OWNER_NAME
+    description: "Your name, used in the voice greeting and identity section"
+    prompt: "Owner name"
+    password: false
+  - name: CLAWTALK_AGENT_NAME
+    description: "Agent name announced on voice calls"
+    prompt: "Agent name"
+    password: false
+  - name: CLAWTALK_GREETING
+    description: "Greeting spoken when an inbound call connects ({ownerName} is interpolated)"
+    prompt: "Inbound greeting"
+    password: false
+  - name: CLAWTALK_ALLOWED_USERS
+    description: "Comma-separated E.164 numbers allowed to reach the agent. Set this to enforce a LOCAL allowlist on top of ClawTalk's server-side gating."
+    prompt: "Allowed callers (comma-separated)"
+    password: false
+  - name: CLAWTALK_ALLOW_ALL_USERS
+    description: "Set true to allow every caller/sender the ClawTalk server delivers"
+    prompt: "Allow all users"
+    password: false
+  - name: CLAWTALK_HOME_CHANNEL
+    description: "Default target for cron delivery, e.g. sms:+15551234567"
+    prompt: "Home channel"
+    password: false

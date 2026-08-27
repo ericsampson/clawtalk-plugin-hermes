@@ -1,0 +1,50 @@
+[project]
+name = "clawtalk-hermes"
+version = "0.1.0"
+description = "ClawTalk for Hermes Agent - voice calls, SMS, missions, and push approvals"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Telnyx" }]
+keywords = ["hermes", "hermes-agent", "clawtalk", "telnyx", "voice", "sms"]
+
+# aiohttp is the only runtime dependency and Hermes already ships it. The REST
+# SDK deliberately uses urllib so tool handlers work on any thread or loop.
+dependencies = ["aiohttp>=3.9"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.23", "ruff>=0.6"]
+
+[project.urls]
+Homepage = "https://www.clawdtalk.com/"
+Repository = "https://github.com/team-telnyx/clawtalk-plugin-hermes"
+Upstream = "https://github.com/team-telnyx/clawtalk-plugin"
+
+# This repo IS the plugin directory: Hermes loads it by folder name from
+# ~/.hermes/plugins/clawtalk. Packaging metadata exists for dev tooling and
+# for the optional pip entry-point install path.
+[project.entry-points."hermes_agent.plugins"]
+clawtalk = "clawtalk"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint.isort]
+# The plugin imports itself as `clawtalk`, so tests must group it as
+# first-party rather than mixing it into third-party imports.
+known-first-party = ["clawtalk"]
+
+[tool.ruff.lint]
+# BLE is selected deliberately: several handlers must swallow everything
+# (a WebSocket read loop, a tool handler, the observer tick) and each of
+# those sites carries an explicit noqa saying why.
+select = ["E", "F", "W", "I", "B", "UP", "C4", "SIM", "RUF", "BLE"]
+ignore = [
+    "E501",   # long lines are mostly prompt text and URLs
+    "B008",   # false positives on dataclass field(default_factory=...)
+    "RUF012", # mutable class attrs are fine for the schema dicts
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["B011", "SIM117"]

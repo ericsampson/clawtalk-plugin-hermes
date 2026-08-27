@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      # Check out INTO a directory named `clawtalk`. The plugin is imported as
+      # the `clawtalk` package (Hermes derives the name from the folder), and
+      # its relative imports only resolve under that name.
+      - uses: actions/checkout@v4
+        with:
+          path: clawtalk
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install
+        working-directory: clawtalk
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e '.[dev]'
+
+      - name: Lint
+        working-directory: clawtalk
+        run: ruff check .
+
+      # No Hermes checkout here on purpose: the adapter and WebSocket-transport
+      # tests skip, and everything else must still pass. That keeps the plugin
+      # provably importable without gateway internals on sys.path.
+      - name: Test
+        working-directory: clawtalk
+        run: pytest tests
