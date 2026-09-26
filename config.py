@@ -63,7 +63,7 @@ def _first_set(*values: Any) -> Any:
     """Return the first value that was actually configured.
 
     Spelled out rather than chained with ``or`` because a legitimate ``False``
-    or ``0`` must beat a lower-precedence source; ``or`` silently skips both
+    or `0` must beat a lower-precedence source; ``or`` silently skips both
     and falls through to the default.
     """
     for value in values:
@@ -103,6 +103,7 @@ class ClawTalkConfig:
     auto_connect: bool = True
     voice_context: str = DEFAULT_VOICE_CONTEXT
     sms_max_reply_chars: int = 300
+    home_channel: str = ""
     missions: MissionsConfig = field(default_factory=MissionsConfig)
     # Local allowlist of E.164 senders. Empty means "trust ClawTalk's
     # server-side gating" (see ClawTalkAdapter.authorization_is_upstream).
@@ -191,6 +192,11 @@ def load_config(
         _as_float(pick("CLAWTALK_SMS_MAX_CHARS", "sms_max_reply_chars", "sms_max_reply_chars", 300), 300)
     )
 
+    raw_home_channel = pick("CLAWTALK_HOME_CHANNEL", "home_channel", "home_channel", "")
+    if isinstance(raw_home_channel, Mapping):
+        raw_home_channel = raw_home_channel.get("chat_id", "")
+    home_channel = str(raw_home_channel or "").strip()
+
     missions_extra = extra.get("missions") if isinstance(extra.get("missions"), Mapping) else {}
     observer_extra = (
         missions_extra.get("observer")
@@ -255,6 +261,7 @@ def load_config(
         auto_connect=auto_connect,
         voice_context=voice_context,
         sms_max_reply_chars=max(1, sms_max),
+        home_channel=home_channel,
         missions=MissionsConfig(
             enabled=missions_enabled,
             default_voice=str(default_voice) if default_voice else None,
