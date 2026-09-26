@@ -36,6 +36,18 @@ class TestConfig:
         config = load_config(extra={"api_key": "from_yaml"})
         assert config.api_key == "from_yaml"
 
+    def test_home_channel_resolves_from_extra_and_env_wins(self, monkeypatch):
+        monkeypatch.delenv("CLAWTALK_HOME_CHANNEL", raising=False)
+        config = load_config(extra={"home_channel": "sms:yaml-target"})
+        assert config.home_channel == "sms:yaml-target"
+
+        config = load_config(extra={"home_channel": {"chat_id": "sms:mapped-target"}})
+        assert config.home_channel == "sms:mapped-target"
+
+        monkeypatch.setenv("CLAWTALK_HOME_CHANNEL", "sms:env-target")
+        config = load_config(extra={"home_channel": "sms:yaml-target"})
+        assert config.home_channel == "sms:env-target"
+
     def test_greeting_interpolates_owner_name(self, monkeypatch):
         monkeypatch.delenv("CLAWTALK_GREETING", raising=False)
         monkeypatch.delenv("CLAWTALK_OWNER_NAME", raising=False)
@@ -45,9 +57,9 @@ class TestConfig:
         assert config.greeting == "Hi Rudra, ready?"
 
     def test_allowed_users_parses_a_csv_string(self, monkeypatch):
-        monkeypatch.setenv("CLAWTALK_ALLOWED_USERS", "+15551234567, +15557654321")
+        monkeypatch.setenv("CLAWTALK_ALLOWED_USERS", "+155****4567, +155****4321")
         config = load_config()
-        assert config.allowed_users == ("+15551234567", "+15557654321")
+        assert config.allowed_users == ("+155****4567", "+155****4321")
 
     def test_observer_disabled_when_missions_are_off(self, monkeypatch):
         monkeypatch.delenv("CLAWTALK_MISSIONS_ENABLED", raising=False)
