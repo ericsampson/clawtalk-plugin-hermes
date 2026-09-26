@@ -55,9 +55,7 @@ gateway:
   platforms:
     clawtalk:
       enabled: true
-      home_channel:
-        chat_id: sms:+155****4567
-        name: Home
+      home_channel: sms:+155****4567
       extra:
         api_key: ct_live_...
         owner_name: Rudra              # used in the greeting and identity block
@@ -80,7 +78,7 @@ gateway:
 | Variable | Default | Purpose |
 |---|---|---|
 | `CLAWTALK_API_KEY` | — (required) | ClawTalk API key |
-| `CLAWTALK_SERVER` | `https://clawdtalk.com` | ClawTalk server URL |
+| `CLAWTALK_SERVER` | `https://clawdtalk.com` | Server URL |
 | `CLAWTALK_OWNER_NAME` | `there` | Your name, used in the greeting |
 | `CLAWTALK_AGENT_NAME` | `ClawTalk` | Agent name announced on calls |
 | `CLAWTALK_GREETING` | `Hey {ownerName}, what's up?` | Inbound call greeting |
@@ -91,14 +89,14 @@ gateway:
 | `CLAWTALK_ALLOW_ALL_USERS` | — | Allow every sender the server delivers |
 | `CLAWTALK_HOME_CHANNEL` | — | Cron delivery target, e.g. `sms:+155****4567` |
 | `CLAWTALK_MISSIONS_ENABLED` | `true` | Register the eleven mission tools |
-| `CLAWTALK_MISSION_OBSERVER_ENABLED` | `true` | Run the background mission observer |
-| `CLAWTALK_MISSION_OBSERVER_INTERVAL_S` | `300` | Observer check interval |
-| `CLAWTALK_MISSION_COOLDOWN_S` | `300` | Observer nudge cooldown |
+| `CLAWTALK_MISSION_OBSERVER_ENABLED` | `true` | Run the background observer |
+| `CLAWTALK_MISSION_OBSERVER_INTERVAL_S` | `300` | Observer tick interval |
+| `CLAWTALK_MISSION_COOLDOWN_S` | `300` | Per-mission nudge cooldown |
 
-`home_channel` is the typed gateway setting for the ClawTalk platform. Its
-`chat_id` must be a channel-qualified target such as `sms:+155****4567`; a bare
-phone number is not valid. An explicit `CLAWTALK_HOME_CHANNEL` environment
-variable takes precedence over the YAML value.
+`home_channel` is the cron delivery target for the ClawTalk platform. Set it to a
+channel-qualified value such as `sms:+155****4567`; a bare phone number is not
+valid. An explicit `CLAWTALK_HOME_CHANNEL` environment variable takes precedence
+over the YAML value.
 
 ---
 

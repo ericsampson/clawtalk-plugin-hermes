@@ -41,9 +41,6 @@ class TestConfig:
         config = load_config(extra={"home_channel": "sms:yaml-target"})
         assert config.home_channel == "sms:yaml-target"
 
-        config = load_config(extra={"home_channel": {"chat_id": "sms:mapped-target"}})
-        assert config.home_channel == "sms:mapped-target"
-
         monkeypatch.setenv("CLAWTALK_HOME_CHANNEL", "sms:env-target")
         config = load_config(extra={"home_channel": "sms:yaml-target"})
         assert config.home_channel == "sms:env-target"

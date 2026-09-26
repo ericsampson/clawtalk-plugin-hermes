@@ -32,15 +32,15 @@ Initial release: a Python port of
 - **Channels are namespaced chat ids** on one `clawtalk` platform
   (`call:`, `walkie:`, `sms:`, `mission:`, `events:calls`), so Hermes derives
   the same per-channel session isolation from its own session keying.
-- **Per-turn prompts use `channel_prompt`**, Hermes's ephemeral, per-turn system
-  prompt, which is applied at API call time and never persisted to transcript history.
+- **Per-turn prompts use `channel_prompt`**, Hermes's ephemeral system prompt,
+  which is applied at API call time and never persisted to transcript history.
 - **Authorization is declared upstream** (`authorization_is_upstream = True`),
   because ClawTalk gates callers server-side and a phone number is not a
   platform account the operator allowlists. Setting `CLAWTALK_ALLOWED_USERS`
   turns this off and hands authorization back to the gateway.
 - **REST SDK is synchronous**, on `urllib` rather than `fetch`, so tool
-  handlers are safe to run from any thread or event loop. `aiohttp` is used only
-  for the WebSocket.
+  handlers are safe on any thread or event loop. `aiohttp` is used only for
+  the WebSocket.
 - **`libphonenumber-js` and `date-fns` dropped.** Durations are formatted with
   the standard library; NANP numbers are formatted and everything else stays as
   dialable E.164.
@@ -51,9 +51,10 @@ Initial release: a Python port of
   setting in `config.yaml`, while preserving `CLAWTALK_HOME_CHANNEL` as the
   higher-precedence override.
 
-- The mission observer and the event handler now address the **same session**.
-  The original keyed the observer by mission ID and the event handler by slug,
-  so the push and pull halves of one mission talked past each other.
+- The mission observer and the mission event handler now address the **same
+  session**. The original keyed the observer by mission ID and the event
+  handler by slug, so the push and pull halves of one mission talked past each
+  other.
 - Mission state writes are **serialised and atomic** (lock plus temp-file
   rename), instead of an unguarded read-modify-write from three callers.
 - A **duplicate-client eviction during authentication** is now detected. The

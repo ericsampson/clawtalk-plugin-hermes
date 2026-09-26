@@ -193,8 +193,6 @@ def load_config(
     )
 
     raw_home_channel = pick("CLAWTALK_HOME_CHANNEL", "home_channel", "home_channel", "")
-    if isinstance(raw_home_channel, Mapping):
-        raw_home_channel = raw_home_channel.get("chat_id", "")
     home_channel = str(raw_home_channel or "").strip()
 
     missions_extra = extra.get("missions") if isinstance(extra.get("missions"), Mapping) else {}
